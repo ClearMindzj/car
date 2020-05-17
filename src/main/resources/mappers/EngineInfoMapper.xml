@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.dao.EngineInfoMapper">
+  <resultMap id="BaseResultMap" type="com.car.pojo.EngineInfo">
+    <id column="eid" jdbcType="INTEGER" property="eid" />
+    <result column="car_id" jdbcType="INTEGER" property="carId" />
+    <result column="pm" jdbcType="DECIMAL" property="pm" />
+    <result column="co" jdbcType="DECIMAL" property="co" />
+    <result column="no" jdbcType="DECIMAL" property="no" />
+    <result column="hc" jdbcType="DECIMAL" property="hc" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    eid, car_id, pm, co, no, hc, longitude, latitude, time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from engine_info
+    where car_id = #{carId,jdbcType=INTEGER}
+    order by time desc
+  </select>
+  <select id="selectByPrimaryKeyLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from engine_info
+    where car_id = #{carId,jdbcType=INTEGER}
+    order by time desc limit 5
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from engine_info
+    where eid = #{eid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.car.pojo.EngineInfo">
+    insert into engine_info (eid, car_id, pm, 
+      co, no, hc, longitude, 
+      latitude, time)
+    values (#{eid,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{pm,jdbcType=DECIMAL}, 
+      #{co,jdbcType=DECIMAL}, #{no,jdbcType=DECIMAL}, #{hc,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL}, #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.car.pojo.EngineInfo">
+    insert into engine_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="eid != null">
+        eid,
+      </if>
+      <if test="carId != null">
+        car_id,
+      </if>
+      <if test="pm != null">
+        pm,
+      </if>
+      <if test="co != null">
+        co,
+      </if>
+      <if test="no != null">
+        no,
+      </if>
+      <if test="hc != null">
+        hc,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="eid != null">
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null">
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="pm != null">
+        #{pm,jdbcType=DECIMAL},
+      </if>
+      <if test="co != null">
+        #{co,jdbcType=DECIMAL},
+      </if>
+      <if test="no != null">
+        #{no,jdbcType=DECIMAL},
+      </if>
+      <if test="hc != null">
+        #{hc,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.car.pojo.EngineInfo">
+    update engine_info
+    <set>
+      <if test="carId != null">
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="pm != null">
+        pm = #{pm,jdbcType=DECIMAL},
+      </if>
+      <if test="co != null">
+        co = #{co,jdbcType=DECIMAL},
+      </if>
+      <if test="no != null">
+        no = #{no,jdbcType=DECIMAL},
+      </if>
+      <if test="hc != null">
+        hc = #{hc,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where eid = #{eid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.car.pojo.EngineInfo">
+    update engine_info
+    set car_id = #{carId,jdbcType=INTEGER},
+      pm = #{pm,jdbcType=DECIMAL},
+      co = #{co,jdbcType=DECIMAL},
+      no = #{no,jdbcType=DECIMAL},
+      hc = #{hc,jdbcType=DECIMAL},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=DECIMAL},
+      time = #{time,jdbcType=TIMESTAMP}
+    where eid = #{eid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByCarIdAndTime"  resultMap="BaseResultMap" resultType="com.car.pojo.EngineInfo">
+    select
+    <include refid="Base_Column_List" />
+    from engine_info e1 where time=(select max(time)
+    from engine_info e2 where e1.car_id=e2.car_id)
+    order by time desc;
+  </select>
+
+  <select id="selectByIdAndTime"  resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from engine_info
+  where car_id = #{carId,jdbcType=INTEGER}
+  and  time = #{time,jdbcType=TIMESTAMP}
+  </select>
+</mapper>

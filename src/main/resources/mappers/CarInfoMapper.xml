@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.dao.CarInfoMapper">
+  <resultMap id="BaseResultMap" type="com.car.pojo.CarInfo">
+    <id column="car_id" jdbcType="INTEGER" property="carId" />
+    <result column="engine_id" jdbcType="VARCHAR" property="engineId" />
+    <result column="car_number" jdbcType="VARCHAR" property="carNumber" />
+    <result column="car_brand" jdbcType="VARCHAR" property="carBrand" />
+    <result column="car_type" jdbcType="VARCHAR" property="carType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    car_id, engine_id, car_number, car_brand, car_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info
+    where car_id = #{carId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from car_info
+    where car_id = #{carId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.car.pojo.CarInfo">
+    insert into car_info (car_id, engine_id, car_number, 
+      car_brand, car_type)
+    values (#{carId,jdbcType=INTEGER}, #{engineId,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, 
+      #{carBrand,jdbcType=VARCHAR}, #{carType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.car.pojo.CarInfo">
+    insert into car_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="carId != null">
+        car_id,
+      </if>
+      <if test="engineId != null">
+        engine_id,
+      </if>
+      <if test="carNumber != null">
+        car_number,
+      </if>
+      <if test="carBrand != null">
+        car_brand,
+      </if>
+      <if test="carType != null">
+        car_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="carId != null">
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="engineId != null">
+        #{engineId,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null">
+        #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carBrand != null">
+        #{carBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null">
+        #{carType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.car.pojo.CarInfo">
+    update car_info
+    <set>
+      <if test="engineId != null">
+        engine_id = #{engineId,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null">
+        car_number = #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carBrand != null">
+        car_brand = #{carBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null">
+        car_type = #{carType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where car_id = #{carId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.car.pojo.CarInfo">
+    update car_info
+    set engine_id = #{engineId,jdbcType=VARCHAR},
+      car_number = #{carNumber,jdbcType=VARCHAR},
+      car_brand = #{carBrand,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR}
+    where car_id = #{carId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from car_info
+  </select>
+</mapper>
